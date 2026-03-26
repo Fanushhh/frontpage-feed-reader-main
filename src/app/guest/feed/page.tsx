@@ -43,7 +43,7 @@ export default function GuestFeedPage() {
         isGuest
         guestMarkRead={markRead}
         guestToggleBookmark={toggleBookmark}
-        itemHref={(item) => `/guest/item/${item.id}`}
+        itemHref={(item) => `/guest/item/${encodeURIComponent(item.id)}`}
       />
     </div>
   );

@@ -62,9 +62,9 @@ export default function GuestSearchPage() {
           </p>
           {results.map((item) => (
             <FeedItemRow
-              key={item.id}
+              key={item.id || item.guid}
               item={item}
-              href={`/guest/item/${item.id}`}
+              href={`/guest/item/${encodeURIComponent(item.id)}`}
               isGuest
               guestMarkRead={markRead}
               guestToggleBookmark={toggleBookmark}

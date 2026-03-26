@@ -25,7 +25,7 @@
 }
 
 @theme {
-  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-sans: var(--font-inter), system-ui, -apple-system, sans-serif;
   --font-serif: "Georgia", "Charter", serif;
   --font-mono: "JetBrains Mono", "SF Mono", "Fira Code", monospace;
 

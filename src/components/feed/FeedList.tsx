@@ -71,7 +71,7 @@ export function FeedList({
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
           {items.map((item) => (
             <FeedItemCard
-              key={item.id}
+              key={item.id || item.guid}
               item={item}
               href={handleHref(item)}
               isGuest={isGuest}
@@ -93,7 +93,7 @@ export function FeedList({
     <div>
       {items.map((item) => (
         <FeedItemRow
-          key={item.id}
+          key={item.id || item.guid}
           item={item}
           href={handleHref(item)}
           isGuest={isGuest}

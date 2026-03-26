@@ -1,24 +1,26 @@
 "use client";
-import { use } from "react";
+import { use, useEffect } from "react";
 import { useGuestStore } from "@/store/guest";
 import { ArrowLeft, ExternalLink, Bookmark, BookmarkCheck } from "lucide-react";
 import Link from "next/link";
 import { formatDate } from "@/lib/utils/time";
-import { ArticleContent } from "@/components/reader/ArticleContent";
 import { notFound } from "next/navigation";
 
 export default function GuestItemPage({ params }: { params: Promise<{ index: string }> }) {
   const { index } = use(params);
   const { items, feeds, bookmarkedItemIds, toggleBookmark, markRead } = useGuestStore();
 
-  const item = items.find((i) => i.id === index);
+  const decodedId = decodeURIComponent(index);
+  const item = items.find((i) => i.id === decodedId);
   if (!item) notFound();
 
   const feed = feeds.find((f) => f.id === item.feed_id);
   const isBookmarked = bookmarkedItemIds.has(item.id);
 
-  // Mark as read
-  markRead(item.id);
+  useEffect(() => {
+    markRead(decodedId);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [decodedId]);
 
   return (
     <div className="max-w-[var(--container-content)] mx-auto px-4 py-6 sm:py-10">
@@ -76,18 +78,15 @@ export default function GuestItemPage({ params }: { params: Promise<{ index: str
         )}
       </header>
 
-      {item.content_html ? (
-        <ArticleContent html={item.content_html} />
-      ) : item.description ? (
-        <p className="text-text-secondary leading-relaxed">{item.description}</p>
-      ) : (
-        <div className="text-center py-12">
-          <p className="text-text-secondary text-sm mb-3">No content available in this feed.</p>
-          {item.url && (
-            <a href={item.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-sm text-accent hover:underline">
-              Read on original site <ExternalLink className="h-3.5 w-3.5" />
-            </a>
-          )}
+      {item.description && (
+        <p className="text-text-secondary leading-relaxed text-base mb-8">{item.description}</p>
+      )}
+      {item.url && (
+        <div className="rounded-xl border border-border bg-bg-secondary p-6 text-center">
+          <p className="text-sm text-text-secondary mb-3">Full article content is available on the original site.</p>
+          <a href={item.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:underline">
+            Read full article <ExternalLink className="h-3.5 w-3.5" />
+          </a>
         </div>
       )}
 
